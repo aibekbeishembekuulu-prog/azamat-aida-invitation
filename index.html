@@ -1,0 +1,1487 @@
+﻿<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Азамат & Аида</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Georgia,"Times New Roman",serif;
+    background:#f8f1e8;
+    color:#4a382f;
+    overflow-x:hidden;
+}
+
+
+/* =========================
+   КОНВЕРТ
+========================= */
+
+.envelope-screen{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:radial-gradient(
+        circle,
+        #fffaf3 0%,
+        #f4e5d2 55%,
+        #e7cdb0 100%
+    );
+
+    transition:1.2s;
+}
+
+.envelope-screen.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+
+.envelope{
+    position:relative;
+    width:330px;
+    height:230px;
+    cursor:pointer;
+    perspective:1000px;
+
+    filter:drop-shadow(
+        0 20px 30px
+        rgba(70,40,20,.2)
+    );
+}
+
+
+.envelope-body{
+    position:absolute;
+    inset:0;
+
+    background:#fffaf3;
+    border:1px solid #d7b894;
+    border-radius:5px;
+}
+
+
+.letter{
+    position:absolute;
+
+    left:20px;
+    right:20px;
+    bottom:25px;
+
+    height:185px;
+
+    background:#fffdf9;
+    border:1px solid #ead8c1;
+
+    text-align:center;
+    padding-top:48px;
+
+    z-index:2;
+
+    transition:1.2s;
+}
+
+
+.letter h2{
+    font-size:28px;
+    font-weight:normal;
+
+    color:#9b7252;
+
+    margin-bottom:15px;
+}
+
+
+.letter p{
+    font-size:13px;
+    line-height:1.6;
+
+    padding:0 20px;
+}
+
+
+.flap{
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:0;
+    height:0;
+
+    border-left:165px solid transparent;
+    border-right:165px solid transparent;
+    border-top:125px solid #ead5bb;
+
+    z-index:4;
+
+    transform-origin:top center;
+
+    transition:1.2s;
+}
+
+
+.seal{
+    position:absolute;
+
+    left:50%;
+    top:105px;
+
+    transform:translate(-50%,-50%);
+
+    width:55px;
+    height:55px;
+
+    border-radius:50%;
+
+    background:#9b7252;
+
+    border:3px solid #d9b991;
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:22px;
+
+    z-index:10;
+}
+
+
+.envelope.open .flap{
+    transform:rotateX(180deg);
+    z-index:1;
+}
+
+
+.envelope.open .letter{
+    transform:translateY(-115px);
+    z-index:5;
+}
+
+
+.envelope.open .seal{
+    opacity:0;
+}
+
+
+/* =========================
+   МУЗЫКА
+========================= */
+
+.music-button{
+    position:fixed;
+
+    right:18px;
+    top:18px;
+
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    border:1px solid #c9a77e;
+
+    background:#fffaf3;
+
+    color:#8c6548;
+
+    font-size:19px;
+
+    cursor:pointer;
+
+    z-index:1000;
+
+    display:none;
+}
+
+
+/* =========================
+   ДИКТОР СТАТУС
+========================= */
+
+.voice-status{
+    position:fixed;
+
+    left:50%;
+    bottom:25px;
+
+    transform:translateX(-50%);
+
+    z-index:10000;
+
+    padding:10px 18px;
+
+    border-radius:30px;
+
+    background:rgba(70,45,30,.88);
+
+    color:white;
+
+    font-size:13px;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.5s;
+}
+
+
+.voice-status.show{
+    opacity:1;
+}
+
+
+/* =========================
+   НЕГИЗГИ БӨЛҮК
+========================= */
+
+.invitation{
+    display:none;
+
+    min-height:100vh;
+
+    background:linear-gradient(
+        rgba(255,250,243,.92),
+        rgba(248,239,227,.96)
+    );
+}
+
+
+.invitation.show{
+    display:block;
+}
+
+
+/* =========================
+   БАШКЫ БӨЛҮК
+========================= */
+
+.hero{
+    min-height:100vh;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:40px 20px;
+}
+
+
+.hero-small{
+    font-size:13px;
+
+    letter-spacing:5px;
+
+    color:#a17a58;
+
+    margin-bottom:30px;
+}
+
+
+.hero h1{
+    font-size:70px;
+
+    font-weight:normal;
+
+    color:#8d6547;
+
+    line-height:.9;
+
+    letter-spacing:3px;
+}
+
+
+.hero .and{
+    font-size:45px;
+
+    color:#bd9470;
+
+    margin:18px 0;
+}
+
+
+.hero-line{
+    width:100px;
+
+    height:1px;
+
+    background:#bd9470;
+
+    margin:25px auto;
+}
+
+
+.hero-date{
+    font-size:18px;
+
+    letter-spacing:7px;
+
+    color:#765b47;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+    max-width:850px;
+
+    margin:auto;
+
+    padding:70px 25px;
+
+    text-align:center;
+}
+
+
+.section-title{
+    font-size:32px;
+
+    font-weight:normal;
+
+    color:#946c4d;
+
+    margin-bottom:25px;
+}
+
+
+.section-text{
+    font-size:17px;
+
+    line-height:1.9;
+
+    color:#665347;
+}
+
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+.countdown{
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-top:35px;
+}
+
+
+.time-box{
+    min-width:75px;
+
+    padding:15px 10px;
+
+    background:rgba(255,255,255,.7);
+
+    border:1px solid #dfc7aa;
+
+    border-radius:8px;
+}
+
+
+.time-box span{
+    display:block;
+
+    font-size:28px;
+
+    color:#936a4b;
+}
+
+
+.time-box small{
+    color:#806b5b;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+}
+
+
+/* =========================
+   СҮРӨТТӨР
+========================= */
+
+.gallery{
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:15px;
+
+    margin-top:35px;
+}
+
+
+.gallery img{
+    width:100%;
+
+    height:280px;
+
+    object-fit:cover;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    transition:.4s;
+}
+
+
+.gallery img:hover{
+    transform:scale(1.02);
+}
+
+
+/* =========================
+   ДАРЕК
+========================= */
+
+.location{
+    margin-top:25px;
+
+    padding:35px 20px;
+
+    background:rgba(255,255,255,.55);
+
+    border:1px solid #dfc7aa;
+
+    border-radius:10px;
+}
+
+
+.location h3{
+    font-size:27px;
+
+    font-weight:normal;
+
+    color:#936a4b;
+
+    margin-bottom:12px;
+}
+
+
+.location p{
+    line-height:1.8;
+
+    color:#665347;
+}
+
+
+/* =========================
+   ЧОҢ СҮРӨТ
+========================= */
+
+.lightbox{
+    position:fixed;
+
+    inset:0;
+
+    z-index:99999;
+
+    background:rgba(20,15,10,.94);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+}
+
+
+.lightbox.show{
+    display:flex;
+}
+
+
+.lightbox img{
+    max-width:90%;
+
+    max-height:85vh;
+
+    object-fit:contain;
+}
+
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next{
+    position:absolute;
+
+    color:white;
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:40px;
+}
+
+
+.lightbox-close{
+    top:20px;
+
+    right:25px;
+}
+
+
+.lightbox-prev{
+    left:20px;
+}
+
+
+.lightbox-next{
+    right:20px;
+}
+
+
+/* =========================
+   ТЕЛЕФОН
+========================= */
+
+@media(max-width:600px){
+
+    .envelope{
+        width:290px;
+        height:205px;
+    }
+
+
+    .flap{
+        border-left-width:145px;
+        border-right-width:145px;
+        border-top-width:110px;
+    }
+
+
+    .letter{
+        height:165px;
+        padding-top:38px;
+    }
+
+
+    .letter h2{
+        font-size:24px;
+    }
+
+
+    .hero h1{
+        font-size:58px;
+    }
+
+
+    .hero-date{
+        font-size:15px;
+        letter-spacing:4px;
+    }
+
+
+    .section{
+        padding:60px 20px;
+    }
+
+
+    .gallery{
+        grid-template-columns:1fr;
+    }
+
+
+    .gallery img{
+        height:330px;
+    }
+
+
+    .time-box{
+        min-width:68px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     МУЗЫКА
+========================= -->
+
+<audio
+    id="weddingMusic"
+    loop
+    preload="auto">
+
+    <source
+        src="music.mp3"
+        type="audio/mpeg">
+
+</audio>
+
+
+<!-- =========================
+     ДИКТОРДУН АУДИОСУ
+========================= -->
+
+<audio
+    id="weddingVoice"
+    preload="auto">
+
+    <source
+        src="voice.mp3"
+        type="audio/mpeg">
+
+</audio>
+
+
+<!-- =========================
+     МУЗЫКА БАТЫРМАСЫ
+========================= -->
+
+<button
+    class="music-button"
+    id="musicButton"
+    onclick="toggleMusic()">
+
+    🎵
+
+</button>
+
+
+<!-- =========================
+     ДИКТОР СТАТУС
+========================= -->
+
+<div
+    class="voice-status"
+    id="voiceStatus">
+
+    🎙️ Сиздерге чакыруу...
+
+</div>
+
+
+<!-- =========================
+     КОНВЕРТ
+========================= -->
+
+<section
+    class="envelope-screen"
+    id="envelopeScreen">
+
+    <div
+        class="envelope"
+        id="envelope"
+        onclick="openInvitation()">
+
+
+        <div class="letter">
+
+            <h2>
+                Азамат & Аида
+            </h2>
+
+
+            <p>
+
+                Сиздерди биздин өзгөчө
+                күнүбүзгө чын жүрөктөн
+                чакырабыз ❤️
+
+            </p>
+
+        </div>
+
+
+        <div class="envelope-body"></div>
+
+
+        <div class="flap"></div>
+
+
+        <div class="seal">
+
+            ❤
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ЧАКЫРУУ
+========================= -->
+
+<main
+    class="invitation"
+    id="invitation">
+
+
+<!-- =========================
+     БАШКЫ БӨЛҮК
+========================= -->
+
+<section class="hero">
+
+    <div class="hero-small">
+
+        WEDDING INVITATION
+
+    </div>
+
+
+    <h1>
+
+        Азамат
+
+    </h1>
+
+
+    <div class="and">
+
+        &
+
+    </div>
+
+
+    <h1>
+
+        Аида
+
+    </h1>
+
+
+    <div class="hero-line"></div>
+
+
+    <div class="hero-date">
+
+        20 • 09 • 2026
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     КУТТУКТОО
+========================= -->
+
+<section class="section">
+
+    <h2 class="section-title">
+
+        Урматтуу туугандар,
+        <br>
+        кадырлуу достор!
+
+    </h2>
+
+
+    <p class="section-text">
+
+        Сиздерди биздин жашообуздагы
+        эң маанилүү жана өзгөчө күндөрдүн бири —
+        Азамат менен Аиданын үлпөт тоюна
+        чын жүрөктөн чакырабыз.
+
+        <br><br>
+
+        Биз үчүн бул кубанычтуу күндү
+        сиздер менен бирге өткөрүү
+        чоң бакыт.
+
+    </p>
+
+</section>
+
+
+<!-- =========================
+     COUNTDOWN
+========================= -->
+
+<section class="section">
+
+    <h2 class="section-title">
+
+        Тойго чейин
+
+    </h2>
+
+
+    <div class="countdown">
+
+
+        <div class="time-box">
+
+            <span id="days">
+
+                00
+
+            </span>
+
+            <small>
+
+                КҮН
+
+            </small>
+
+        </div>
+
+
+        <div class="time-box">
+
+            <span id="hours">
+
+                00
+
+            </span>
+
+            <small>
+
+                СААТ
+
+            </small>
+
+        </div>
+
+
+        <div class="time-box">
+
+            <span id="minutes">
+
+                00
+
+            </span>
+
+            <small>
+
+                МҮНӨТ
+
+            </small>
+
+        </div>
+
+
+        <div class="time-box">
+
+            <span id="seconds">
+
+                00
+
+            </span>
+
+            <small>
+
+                СЕКУНД
+
+            </small>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     СҮРӨТТӨР
+========================= -->
+
+<section class="section">
+
+    <h2 class="section-title">
+
+        Биздин көз ирмемдер
+
+    </h2>
+
+
+    <p class="section-text">
+
+        Жүрөгүбүздө калган
+        өзгөчө көз ирмемдерден
+        чакан эскерүү...
+
+    </p>
+
+
+    <div class="gallery">
+
+
+        <img
+            src="photo1.jpg"
+            alt="Азамат жана Аида"
+            onclick="openPhoto(0)">
+
+
+        <img
+            src="photo2.jpg"
+            alt="Азамат жана Аида"
+            onclick="openPhoto(1)">
+
+
+        <img
+            src="photo3.jpg"
+            alt="Азамат жана Аида"
+            onclick="openPhoto(2)">
+
+
+        <img
+            src="photo4.jpg"
+            alt="Азамат жана Аида"
+            onclick="openPhoto(3)">
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ДАРЕК
+========================= -->
+
+<section class="section">
+
+    <h2 class="section-title">
+
+        Тойдун дареги
+
+    </h2>
+
+
+    <div class="location">
+
+        <h3>
+
+            Ресторан «Хан Ордо»
+
+        </h3>
+
+
+        <p>
+
+            📍 Токмок шаары
+
+            <br>
+
+            Кыргызская көчөсү, 61/1
+
+        </p>
+
+
+        <br>
+
+
+        <p>
+
+            Сиздерди биздин өзгөчө
+            күнүбүздө чыдамсыздык менен
+            күтөбүз! ❤️
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     АЯГЫ
+========================= -->
+
+<section class="section">
+
+    <h2 class="section-title">
+
+        Урматтоо менен
+
+    </h2>
+
+
+    <p class="section-text">
+
+        <strong>
+
+            Азамат & Аида
+
+        </strong>
+
+
+        <br><br>
+
+
+        20-сентябрь 2026-жыл
+
+    </p>
+
+</section>
+
+
+</main>
+
+
+<!-- =========================
+     СҮРӨТТҮ ЧОҢОЙТУУ
+========================= -->
+
+<div
+    class="lightbox"
+    id="lightbox">
+
+
+    <button
+        class="lightbox-close"
+        onclick="closePhoto()">
+
+        ×
+
+    </button>
+
+
+    <button
+        class="lightbox-prev"
+        onclick="prevPhoto()">
+
+        ‹
+
+    </button>
+
+
+    <img
+        id="lightboxImage"
+        src=""
+        alt="Сүрөт">
+
+
+    <button
+        class="lightbox-next"
+        onclick="nextPhoto()">
+
+        ›
+
+    </button>
+
+
+</div>
+
+
+<script>
+
+
+/* =========================
+   ЭЛЕМЕНТТЕР
+========================= */
+
+const music =
+    document.getElementById("weddingMusic");
+
+
+const voice =
+    document.getElementById("weddingVoice");
+
+
+const envelope =
+    document.getElementById("envelope");
+
+
+const invitation =
+    document.getElementById("invitation");
+
+
+const envelopeScreen =
+    document.getElementById("envelopeScreen");
+
+
+const musicButton =
+    document.getElementById("musicButton");
+
+
+const voiceStatus =
+    document.getElementById("voiceStatus");
+
+
+let currentPhoto = 0;
+
+
+/* =========================
+   КОНВЕРТТИ АЧУУ
+========================= */
+
+function openInvitation(){
+
+    /* Конверт ачылат */
+
+    envelope.classList.add("open");
+
+
+    /* Чакыруу көрүнөт */
+
+    setTimeout(function(){
+
+        envelopeScreen.classList.add("hide");
+
+        invitation.classList.add("show");
+
+    },300);
+
+
+    /* Музыка */
+
+    music.volume = 0.05;
+
+    music.currentTime = 0;
+
+    music.play().catch(function(){
+
+        console.log(
+            "Музыка автоматтык башталган жок"
+        );
+
+    });
+
+
+    /* Музыка кнопкасы */
+
+    musicButton.style.display = "block";
+
+
+    /* Диктор */
+
+    setTimeout(function(){
+
+        startNarrator();
+
+    },500);
+
+}
+
+
+/* =========================
+   ДИКТОР
+========================= */
+
+function startNarrator(){
+
+    /* Диктордун аудиосун башынан баштайбыз */
+
+    voice.currentTime = 0;
+
+    /* Музыка өтө жай */
+
+    music.volume = 0.05;
+
+
+    /* Экрандагы билдирүү */
+
+    voiceStatus.textContent =
+        "🎙️ Сиздерге чакыруу...";
+
+    voiceStatus.classList.add("show");
+
+
+    /* Дикторду ойнотуу */
+
+    voice.play().catch(function(){
+
+        voiceStatus.textContent =
+            "🎙️ Дикторду ойнотуу мүмкүн болгон жок";
+
+    });
+
+
+    /* Диктор бүткөндө */
+
+    voice.onended = function(){
+
+        voiceStatus.classList.remove("show");
+
+        /* Музыка кайра күчөйт */
+
+        music.volume = 0.35;
+
+    };
+
+
+    /* Эгер аудиодо ката болсо */
+
+    voice.onerror = function(){
+
+        voiceStatus.textContent =
+            "🎙️ Аудио табылган жок";
+
+        music.volume = 0.35;
+
+    };
+
+}
+
+
+/* =========================
+   МУЗЫКА
+========================= */
+
+function toggleMusic(){
+
+    if(music.paused){
+
+        music.volume = 0.35;
+
+        music.play().catch(function(){});
+
+        musicButton.textContent = "🎵";
+
+    }
+
+    else{
+
+        music.pause();
+
+        musicButton.textContent = "🔇";
+
+    }
+
+}
+
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+const weddingDate =
+    new Date(
+        "2026-09-20T18:00:00+06:00"
+    );
+
+
+function updateCountdown(){
+
+    const now =
+        new Date();
+
+
+    const difference =
+        weddingDate - now;
+
+
+    if(difference <= 0){
+
+        document.getElementById("days")
+            .textContent = "00";
+
+        document.getElementById("hours")
+            .textContent = "00";
+
+        document.getElementById("minutes")
+            .textContent = "00";
+
+        document.getElementById("seconds")
+            .textContent = "00";
+
+        return;
+
+    }
+
+
+    const days =
+        Math.floor(
+            difference /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    const hours =
+        Math.floor(
+            (difference /
+            (1000 * 60 * 60)) % 24
+        );
+
+
+    const minutes =
+        Math.floor(
+            (difference /
+            (1000 * 60)) % 60
+        );
+
+
+    const seconds =
+        Math.floor(
+            (difference /
+            1000) % 60
+        );
+
+
+    document.getElementById("days")
+        .textContent =
+        String(days)
+        .padStart(2,"0");
+
+
+    document.getElementById("hours")
+        .textContent =
+        String(hours)
+        .padStart(2,"0");
+
+
+    document.getElementById("minutes")
+        .textContent =
+        String(minutes)
+        .padStart(2,"0");
+
+
+    document.getElementById("seconds")
+        .textContent =
+        String(seconds)
+        .padStart(2,"0");
+
+}
+
+
+updateCountdown();
+
+
+setInterval(
+    updateCountdown,
+    1000
+);
+
+
+/* =========================
+   СҮРӨТ
+========================= */
+
+function openPhoto(index){
+
+    currentPhoto = index;
+
+
+    document.getElementById(
+        "lightboxImage"
+    ).src =
+        "photo" +
+        (index + 1) +
+        ".jpg";
+
+
+    document.getElementById(
+        "lightbox"
+    ).classList.add("show");
+
+}
+
+
+function closePhoto(){
+
+    document.getElementById(
+        "lightbox"
+    ).classList.remove("show");
+
+}
+
+
+function nextPhoto(){
+
+    currentPhoto++;
+
+
+    if(currentPhoto > 3){
+
+        currentPhoto = 0;
+
+    }
+
+
+    openPhoto(currentPhoto);
+
+}
+
+
+function prevPhoto(){
+
+    currentPhoto--;
+
+
+    if(currentPhoto < 0){
+
+        currentPhoto = 3;
+
+    }
+
+
+    openPhoto(currentPhoto);
+
+}
+
+
+/* =========================
+   КЛАВИАТУРА
+========================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Escape"){
+
+            closePhoto();
+
+        }
+
+
+        if(event.key === "ArrowRight"){
+
+            nextPhoto();
+
+        }
+
+
+        if(event.key === "ArrowLeft"){
+
+            prevPhoto();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
